@@ -6,7 +6,7 @@
         <entry key="../../Library/Android/sdk/platforms/android-32/data/res/layout/auto_complete_list.xml" value="0.23867753623188406" />
         <entry key="app/src/main/res/drawable/ic_bike.xml" value="0.196" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.18" />
-        <entry key="app/src/main/res/layout/bike_item_list.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/bike_item_list.xml" value="0.5" />
         <entry key="app/src/main/res/layout/custom_progress_bar.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_bike_list.xml" value="0.17" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.2" />

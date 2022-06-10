@@ -28,7 +28,7 @@ class BikeListAdapter : ListAdapter<Feature, BikeListAdapter.FeatureViewHolder>(
         holder.binding.label.text = cardoption.properties?.label
         holder.binding.noOfBike.text = cardoption.properties?.bikes
         holder.binding.noOfPlace.text = cardoption.properties?.free_racks
-        holder.binding.distance.text= cardoption.distance.toString()
+        holder.binding.distance.text= cardoption.distance.toString().plus("km")
     }
 
 

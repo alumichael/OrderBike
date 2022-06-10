@@ -120,8 +120,10 @@ class DetailedFragment : Fragment(),OnMapReadyCallback {
 
         sharedViewModel.currentLocationCord.observe(requireActivity(), Observer {
             lifecycleScope.launch {
-                val currentLocation = LatLng(it.latitude, it.longitude)
-                mMap.addMarker(MarkerOptions().position(currentLocation).title("Current Location"))
+                if(it!=null){
+                    val currentLocation = LatLng(it.latitude, it.longitude)
+                    mMap.addMarker(MarkerOptions().position(currentLocation).title("Current Location"))
+                }
             }
         })
 

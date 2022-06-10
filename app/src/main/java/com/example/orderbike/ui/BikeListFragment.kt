@@ -50,10 +50,8 @@ class BikeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         //request bike json data online
         sharedViewModel.getBikeList()
-
         visible(binding.progressBar,true)
 
         //observe the bike list response livedata
@@ -65,8 +63,10 @@ class BikeListFragment : Fragment() {
 
                     //submit to recyclerView Adapter
                     if(it?.features?.size!=0){
+
                         //compute distance between current location
                         //and the defined bike location
+
                         if(sharedViewModel.currentLocationCord.value!=null){
                             it?.features?.forEach {
                                 it.distance = it.geometry?.coordinates?.get(0)?.let { start ->
@@ -116,12 +116,12 @@ class BikeListFragment : Fragment() {
 
     private fun computeDistance(currentLocationCord: Location,
                                 latDestination:Double,
-                                longDestination:Double):Float{
+                                longDestination:Double): Float {
 
         val bikeLocation = Location(LocationManager.NETWORK_PROVIDER)
         bikeLocation.latitude = latDestination
         bikeLocation.longitude = longDestination
 
-        return  currentLocationCord.distanceTo(bikeLocation)
+        return  currentLocationCord.distanceTo(bikeLocation).div(1000)
     }
 }

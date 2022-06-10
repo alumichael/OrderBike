@@ -21,7 +21,7 @@ class MainViewModel : ViewModel(){
     private var bikelist_data : BikeModel?=null
     private  var error_msg: String=""
 
-    //bike response list in livedata
+    //declaing bike responseList as livedata
     private val _bikeItemlist= MutableLiveData<BikeModel?>()
     val bikeListResponse: LiveData<BikeModel?> get() = _bikeItemlist
 
@@ -31,18 +31,14 @@ class MainViewModel : ViewModel(){
     private val _currentLocationCord = MutableLiveData<Location>()
     val currentLocationCord : LiveData<Location> get() = _currentLocationCord
 
-    private val _currentDistance = MutableLiveData<Float>()
-    val currentDistance : LiveData<Float> get() = _currentDistance
-
-
     fun getLocationChange(location:Location){
-        Log.i("currentLocationCord","Yes")
+        //current location livedata
         _currentLocationCord.value=location
-        Log.i("currentLocationCord",_currentLocationCord.value.toString())
     }
 
-    //The suspend function @withContext is use to manage the suspend block
-    //within a the subrcibe context - i.e mainActivity,and other fragments
+    //The suspend function @withContext is use to manage the API request on
+    //on background thread, dispatcher helps to dispatch the JOB in context
+
     fun getBikeList() = viewModelScope.launch {
 
         withContext(Dispatchers.IO){
