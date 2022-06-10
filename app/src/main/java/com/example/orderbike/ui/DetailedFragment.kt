@@ -42,6 +42,10 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import kotlinx.coroutines.launch
 
+/**
+ *DetailedFragment is reponsible for displaying two major cordinates
+ * 1. The current location cord, 2. The predfined bike Location
+ */
 class DetailedFragment : Fragment(),OnMapReadyCallback {
 
     private var _binding: FragmentDetailedBinding? = null
@@ -50,11 +54,11 @@ class DetailedFragment : Fragment(),OnMapReadyCallback {
     private var feature: List<Feature>? = null
     val args: DetailedFragmentArgs by navArgs()
 
+    //initialized some detailedfragment variable
     var bikelatitude: Double? = 0.0
     var bikelongitude: Double? = 0.0
     var noOfBikes: String = ""
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mMap: GoogleMap
     private lateinit var mapFragment: SupportMapFragment
 
@@ -109,15 +113,17 @@ class DetailedFragment : Fragment(),OnMapReadyCallback {
         //creating a bike location coordinate object and adding a marker
         val bikeLocation = bikelatitude?.let { bikelongitude?.let { it1 -> LatLng(it, it1) } }
 
+        //Add Maker to bike Location coordinate
         bikeLocation?.let {
             MarkerOptions().position(it).title(noOfBikes).icon(
                 BitmapFromVector(requireContext(), R.drawable.ic_bike)
             )
         }?.let { mMap.addMarker(it) }
-        mMap.isMyLocationEnabled = true
 
+        mMap.isMyLocationEnabled = true
         bikeLocation?.let { CameraUpdateFactory.newLatLng(it) }?.let { mMap.moveCamera(it) }
 
+        //Retrieve the latest location live data and and add marker
         sharedViewModel.currentLocationCord.observe(requireActivity(), Observer {
             lifecycleScope.launch {
                 if(it!=null){

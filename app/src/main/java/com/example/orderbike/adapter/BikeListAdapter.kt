@@ -24,14 +24,13 @@ class BikeListAdapter : ListAdapter<Feature, BikeListAdapter.FeatureViewHolder>(
 
     override fun onBindViewHolder(holder: FeatureViewHolder, position: Int) {
         val cardoption = getItem(position)
-
         holder.binding.label.text = cardoption.properties?.label
         holder.binding.noOfBike.text = cardoption.properties?.bikes
         holder.binding.noOfPlace.text = cardoption.properties?.free_racks
         holder.binding.distance.text= cardoption.distance.toString().plus("km")
     }
 
-
+    //ItemGroupDiffUtill class for optimized item rendering and filtering
     class ItemGroupDiffUtill : DiffUtil.ItemCallback<Feature>() {
         override fun areItemsTheSame(oldItem: Feature, newItem: Feature): Boolean {
             return oldItem.id === newItem.id
@@ -42,7 +41,6 @@ class BikeListAdapter : ListAdapter<Feature, BikeListAdapter.FeatureViewHolder>(
         }
 
     }
-
 
     inner class FeatureViewHolder(val binding: BikeItemListBinding) :
         RecyclerView.ViewHolder(binding.root) {
