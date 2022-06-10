@@ -1,6 +1,8 @@
 package com.example.orderbike.ui
 
 
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,6 +53,7 @@ class BikeListFragment : Fragment() {
 
         //request bike json data online
         sharedViewModel.getBikeList()
+
         visible(binding.progressBar,true)
 
         //observe the bike list response livedata
@@ -62,8 +65,22 @@ class BikeListFragment : Fragment() {
 
                     //submit to recyclerView Adapter
                     if(it?.features?.size!=0){
-                        (binding.recyclerView.itemAnimator as SimpleItemAnimator)
-                            .supportsChangeAnimations = false
+                        //compute distance between current location
+                        //and the defined bike location
+                        if(sharedViewModel.currentLocationCord.value!=null){
+                            it?.features?.forEach {
+                                it.distance = it.geometry?.coordinates?.get(0)?.let { start ->
+                                    it.geometry?.coordinates?.get(1)?.let { end ->
+                                        computeDistance(
+                                            sharedViewModel.currentLocationCord.value!!,
+                                            start,
+                                            end
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
 
                         //Submits a new list to be diffed, and displayed.
                         bikeListAdapter.submitList(it?.features)
@@ -95,5 +112,16 @@ class BikeListFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun computeDistance(currentLocationCord: Location,
+                                latDestination:Double,
+                                longDestination:Double):Float{
+
+        val bikeLocation = Location(LocationManager.NETWORK_PROVIDER)
+        bikeLocation.latitude = latDestination
+        bikeLocation.longitude = longDestination
+
+        return  currentLocationCord.distanceTo(bikeLocation)
     }
 }

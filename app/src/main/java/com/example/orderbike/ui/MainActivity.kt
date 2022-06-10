@@ -39,7 +39,6 @@ open class MainActivity : AppCompatActivity() {
     private var locationPermissionGranted = false
 
     private val REQUEST_CHECK_SETTINGS = 1
-    private val REQUEST_GRANT_PERMISSION = 2
     private lateinit var locationRequest: LocationRequest
     private var currentLocation: Location? = null
     private lateinit var locationCallback: LocationCallback
@@ -62,14 +61,15 @@ open class MainActivity : AppCompatActivity() {
         //check internet connection
         checkConnection()
 
+        //create call back location request
+        createLocationRequest()
+
         //check settings
         settingsCheck()
 
         //initialized Location service client
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //create call back location request
-        createLocationRequest()
 
         if(!locationPermissionGranted){
             return
@@ -106,14 +106,14 @@ open class MainActivity : AppCompatActivity() {
         val client = LocationServices.getSettingsClient(this)
         val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
         task.addOnSuccessListener(
-            this,
-            OnSuccessListener<LocationSettingsResponse?> {
-                // All location settings are satisfied. The client can initialize
-                // location requests here.
-                Log.d("TAG", "onSuccess: settingsCheck")
-                getCurrentLocation()
-            })
-        task.addOnFailureListener(this, OnFailureListener { e ->
+            this
+        ) {
+            // All location settings are satisfied. The client can initialize
+            // location requests here.
+            Log.d("TAG", "onSuccess: settingsCheck")
+            getCurrentLocation()
+        }
+        task.addOnFailureListener(this) { e ->
             if (e is ResolvableApiException) {
                 // Location settings are not satisfied, but this can be fixed
                 // by showing the user a dialog.
@@ -130,7 +130,7 @@ open class MainActivity : AppCompatActivity() {
                     // Ignore the error.
                 }
             }
-        })
+        }
     }
 
 
@@ -189,7 +189,6 @@ open class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-
 
     private fun getLocationPermission() {
         /*

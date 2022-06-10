@@ -37,7 +37,6 @@ class MainViewModel : ViewModel(){
 
     fun getLocationChange(location:Location){
         Log.i("currentLocationCord","Yes")
-
         _currentLocationCord.value=location
         Log.i("currentLocationCord",_currentLocationCord.value.toString())
     }
@@ -45,50 +44,21 @@ class MainViewModel : ViewModel(){
     //The suspend function @withContext is use to manage the suspend block
     //within a the subrcibe context - i.e mainActivity,and other fragments
     fun getBikeList() = viewModelScope.launch {
+
         withContext(Dispatchers.IO){
-            val apiService = ApiService.getInstance()
             try {
-                bikelist_data = apiService.getBikeItem()
-                //computing the distance on IO thread
-                bikelist_data?.features?.forEach {
-                    it.distance = it.geometry?.coordinates?.get(0)?.let { start ->
-                        it.geometry?.coordinates?.get(1)?.let { end ->
-                            currentLocationCord.value?.let { it1 ->
-                                computeDistance(
-                                    it1,
-                                    start,
-                                    end
-                                )
-                            }
-                        }
-                    }
-                }
-
-                Log.i("bikelist_data",bikelist_data.toString())
-
-            }
-            catch (e: Exception) {
+                bikelist_data = ApiService.getInstance().getBikeItem()
+            } catch (e: Exception) {
                  error_msg = e.message.toString()
             }
         }
-
             //update the live data value from IO thread result
             _bikeItemlist.value = bikelist_data
             _errorMessage.value = error_msg
 
     }
 
-    private fun computeDistance(currentLocationCord:Location,
-                                latDestination:Double,
-                                longDestination:Double):Float{
 
-        val bikeLocation = Location(LocationManager.NETWORK_PROVIDER)
-        bikeLocation.latitude = latDestination
-        bikeLocation.longitude = longDestination
-
-        _currentDistance.value = currentLocationCord.distanceTo(bikeLocation)
-        return  currentLocationCord.distanceTo(bikeLocation)
-    }
 
 
 
