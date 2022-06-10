@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">OrderBike</string>
+    <string name="available_bike">Available Bikes</string>
+    <string name="available_places">Available Places</string>
+    <string name="bike_station">Bike Station</string>
+    <string name="distance_txt">600m</string>
+    <string name="please_wait">Please wait</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_msg">Error Msg</string>
+</resources>
